@@ -79,8 +79,25 @@
                 event.preventDefault()
         },
         onRegionClick: function(event, code){
-            if(!IsRegionEnabled(code) || (SelectedRegion != null && IsSameTeam(Turn, code) && SelectedRegion != code) )
+            if(!IsRegionEnabled(code) || (SelectedRegion != null && IsSameTeam(Turn, code) && SelectedRegion != code)  ) // TODO: if you selected one of your regions, but you click another one, dont pevent and update the selected one
                 event.preventDefault()
+
+            if(SelectedRegion === code) {
+                SelectedRegion = null;
+                UnFocus(map);
+            }else {
+                if (SelectedRegion != null)
+                    ChallengeRegion(SelectedRegion, code)
+                else {
+                    if(CanSelect(code)) {
+                        SelectedRegion = code;
+                        AutoZoom(map, code);
+                    }else{
+                        event.preventDefault();
+                    }
+                }
+            }
+
         },
         series: {
           regions: [{
@@ -102,10 +119,18 @@
       });
         map.series.regions[0].setValues(DetermineRegionColors());
 
+
+        $(document).on("click", "#turn", function(){
+            $("#turn").html(PassTurn());
+            $("#turn").css("background", PlayerColors[Turn])
+        })
+
+
     })
   </script>
 </head>
 <body>
-  <div id="map" style="width: 100%; height: 400px"></div>
+    <div id="map" style="width: 100%; height: 400px"></div>
+    <div id="turn" style="position:absolute;top:50px;left:50px;padding:20px;background:#cdcdcd;cursor:pointer;">0</div>
 </body>
 </html>
