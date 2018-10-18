@@ -45,22 +45,41 @@
 
   <script src="assets/jquery-jvectormap-europe-mill.js"></script>
   <!-- <script src="assets/jquery-jvectormap-world-mill-en.js"></script> -->
+
+    <script src="../game.js"></script>
   <script>
     jQuery.noConflict();
     jQuery(function(){
       var $ = jQuery;
+
+        var myCustomColors = {
+            'ES': '#4E7387',
+            'RU': '#333333',
+            'UA': '#89AFBF',
+            'UK': '#817F8E',
+            'FR': '#344B5E'
+        };
+
         $("#map").height(window.innerHeight)
 
-      var t = $('#map').vectorMap({
+      var map = new jvm.Map({
         map: 'europe_mill',
-          zoomOnScroll: false,
-          panOnDrag: false,
-          focusOn: {
-            regions: ["PT","DK","EE","UA"]
-          },
-          regionsSelectable:true
+        container: $('#map'),
+        zoomOnScroll: false,
+        panOnDrag: false,
+        focusOn: {
+        regions: ["PT","DK","EE","UA"]
+        },
+        regionsSelectable:true,
+        onRegionSelected: SelectRegion,
+        series: {
+          regions: [{
+              attribute: 'fill'
+          }]
+        }
       });
-
+        map.series.regions[0].setValues(myCustomColors);
+        console.log(map.series)
 
     })
   </script>
