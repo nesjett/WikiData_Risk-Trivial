@@ -49,11 +49,10 @@
   <script src="assets/jquery-jvectormap-europe-mill.js"></script>
   <!-- <script src="assets/jquery-jvectormap-world-mill-en.js"></script> -->
 
+    <script src="../js/wikidata_consumer.js"></script>
     <script src="../game.js"></script> <!-- always load before creating map -->
   <script>
-    jQuery.noConflict();
     jQuery(function(){
-      var $ = jQuery;
 
       /* // Example color set
         var myCustomColors = {
@@ -96,9 +95,10 @@
                 SelectedRegion = null;
                 UnFocus(map);
             }else {
-                if (SelectedRegion != null)
-                    ChallengeRegion(SelectedRegion, code)
-                else {
+                if (SelectedRegion != null) {
+                    if (!IsSameTeam(Turn, code))
+                        ChallengeRegion(SelectedRegion, code)
+                }else {
                     if(CanSelect(code)) {
                         SelectedRegion = code;
                         AutoZoom(map, code);
@@ -141,6 +141,12 @@
             $("#" + dataModal).css({"display":"block"});
             // $("body").css({"overflow-y": "hidden"}); //Prevent double scrollbar.
         });
+
+        $(document).on("click", "#opt-container button", function(e){
+            //e.preventDefault();
+            console.log($(e.currentTarget).data(correct))
+            //var isRight =
+        });
     })
   </script>
 </head>
@@ -160,17 +166,9 @@
                 <h1 id="modal-head">Simple modal box</h1>
             </div>
             <div class="modal-body">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hic soluta saepe, atque, iure quidem maiores non dolores, fuga eaque voluptatibus corporis accusantium quas. Eligendi velit eum fugiat eius? Distinctio reiciendis sint error, repellat ut soluta doloremque, accusamus vitae placeat?</p>
+                <p id="modal-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hic soluta saepe, atque, iure quidem maiores non dolores, fuga eaque voluptatibus corporis accusantium quas. Eligendi velit eum fugiat eius? Distinctio reiciendis sint error, repellat ut soluta doloremque, accusamus vitae placeat?</p>
                 <br />
                 <div id="opt-container">
-                    <div>
-                        <button class=option">op1</button>
-                        <button class=option">op1</button>
-                    </div>
-                    <div>
-                        <button class=option">op1</button>
-                        <button class=option">op1</button>
-                    </div>
                 </div>
             </div>
         </div>

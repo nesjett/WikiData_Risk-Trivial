@@ -1,9 +1,10 @@
 var AvailableRegions = ["BE","FR","BG","DK","HR","DE","BA","HU","JE","BY","GR","NL","PT","LI","LV","LT","LU","FO","PL","XK","CH","EE","IS","AL","IT","GG","CZ","GB","AX","IE","ES","ME","MD","RO","RS","MK","SK","MT","SI","SM","UA","AT"];
 var AvailableRegionsID = ["Q31","Q142","Q219","Q35","Q224","Q183","Q225","Q28","Q785","Q184","Q41","Q55","Q45","Q347","Q211","Q37","Q32","Q4628","Q36","Q1246","Q39","Q191","Q189","Q222","Q38","Q25230","Q213","Q145","Q27","Q29","Q236","Q217","Q218","Q403","Q221","Q214","Q233","Q215","Q238","Q212","Q40"];
+
 var UnavailableRegions = ["RU","SE","NO","AD","FI","IM"]; // To disable them from selection and color
 var AutozoomRegions = ["VA","MC","SM","LI","MT","AD","LU","CY","XK","ME","GR","AL","MK"];
 var PlayerColors = ["#FF0C0C","#0C7AFF","#AAFF0C", "#e02aa9"]; // max number of players (4)
-var NumPlayers = 3; // Number of players
+var NumPlayers = 4; // Number of players
 
 var SelectionColor = "#FFFFFF";
 var DisabledRegionColor = "#777777";
@@ -20,9 +21,10 @@ var SelectedRegion = null; // currently selected region
 InitPlayers(); // Must be called BEFORE map creation
 
 function InitPlayers(){
-    ShuffleArray(AvailableRegions); // randomize player initial regions
+    var RegionsCopy = AvailableRegions.slice(0); // duplicate array to maintain original data
+    ShuffleArray(RegionsCopy); // randomize player initial regions
 
-    var RegionsPerPlayer = AvailableRegions.length / NumPlayers;
+    var RegionsPerPlayer = RegionsCopy.length / NumPlayers;
     if(!Number.isInteger(RegionsPerPlayer)) // If not exact regions, give them randomly to last player to play
         RegionsPerPlayer--;
 
@@ -31,15 +33,15 @@ function InitPlayers(){
         Scores[i] = [];
         Resources[i] = [];
         for(j = 0; j < RegionsPerPlayer; j++) {
-            Scores[i].push(AvailableRegions.pop());
+            Scores[i].push(RegionsCopy.pop());
             Resources[i].push(GetRandomInt(1,10));
         }
     }
 
     if(!Number.isInteger(RegionsPerPlayer)) { // If not exact regions, give them randomly to last player to play
-        Scores[Scores.length - 2].push(AvailableRegions.pop())
+        Scores[Scores.length - 2].push(RegionsCopy.pop())
         Resources[Resources.length - 2].push(GetRandomInt(1,10))
-        Scores[Scores.length - 1].push(AvailableRegions.pop())
+        Scores[Scores.length - 1].push(RegionsCopy.pop())
         Resources[Resources.length - 1].push(GetRandomInt(1,10))
     }
 
@@ -101,9 +103,18 @@ function IsRegionEnabled(code){
     return UnavailableRegions.indexOf(String(code)) === -1;
 }
 
+function GetCodeFromShortcode(code){
+    if(AvailableRegions.indexOf(code) !== -1)
+        return AvailableRegionsID[AvailableRegions.indexOf(code)];
+    else
+        return null;
+}
 
 function ChallengeRegion(Challenger, Challenged){
-
+    console.log("Challenging!!")
+    var id = GetCodeFromShortcode(Challenged);
+    if(id != null)
+        GetPregunta(id)
 }
 
 function AutoZoom(map, code){
