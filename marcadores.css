@@ -1,0 +1,16 @@
+.circle {
+  height: 50px;
+  width: 50px;
+  background-color: #555;
+  border-radius: 50%;
+}
+.square {
+  margin-top: 5px;
+  margin-left: -20px;
+  height: 40px;
+  width: 50px;
+  background-color: #555;
+}
+  .marcador{
+       display: inline-flex;
+    }
