@@ -66,6 +66,9 @@
 
       var map = new jvm.Map({
         map: 'europe_mill',
+          markers: [
+              {latLng: [40.416775, -3.703790], name: 'Spain'}
+          ],
         container: $('#map'),
         zoomOnScroll: false,
         panOnDrag: false,
@@ -73,6 +76,10 @@
         regions: ["PT","DK","EE","UA"]
         },
         regionsSelectable:true,
+        markersSelectable:false,
+          onMarkerOver:function(e){
+            e.preventDefault();
+          },
         onRegionSelected: SelectRegion,
         onRegionOver: function(event, code){
             if(!IsRegionEnabled(code))
@@ -111,7 +118,7 @@
               "stroke-width": 3
           },
           selected: {
-              fill: '#fffdf2'
+              fill: SelectionColor
           },
           selectedHover: {
           }
