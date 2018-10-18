@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2>Activate Modal with JavaScript</h2>
+  <!-- Trigger the modal with a button -->
+  <button type="button" class="btn btn-info btn-lg" id="myBtn">Open Modal</button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 id="modal-title">Pais</h4>
+        </div>
+        <div id="modal-body">
+          <p>Some text in the modal.</p>
+        </div>
+        <div >
+          <button id="modal0" type="button" class="btn btn-default" data-dismiss="modal">Op1</button>
+           <button id="modal1" type="button" class="btn btn-default" data-dismiss="modal">Op2</button>
+            <button id="modal2" type="button" class="btn btn-default" data-dismiss="modal">Op3</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
+
+<script>
+  --esto
+   function pregunta(pais,pregunta,respuestas,c){
+      document.getElementById("modal-title").innerHTML = pais
+      document.getElementById("modal-body").innerHTML = pregunta
+
+      for(let i = 0;i<3;i++)
+      {
+         document.getElementById("modal"+i).innerHTML = ''+respuestas[i] +''
+         $(".modal"+i).data("respuesta",respuestas[i] );
+      }
+       $("#myModal").modal();
+  }
+--esto
+
+$(document).ready(function(){
+    $("#myBtn").click(function(){
+       pregunta("sd","sda",["Saab", "Volvo", "BMW"],"ccc")
+    });
+});
+</script>
+
+</body>
+</html>
