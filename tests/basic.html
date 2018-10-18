@@ -46,12 +46,13 @@
   <script src="assets/jquery-jvectormap-europe-mill.js"></script>
   <!-- <script src="assets/jquery-jvectormap-world-mill-en.js"></script> -->
 
-    <script src="../game.js"></script>
+    <script src="../game.js"></script> <!-- always load before creating map -->
   <script>
     jQuery.noConflict();
     jQuery(function(){
       var $ = jQuery;
 
+      /* // Example color set
         var myCustomColors = {
             'ES': '#4E7387',
             'RU': '#333333',
@@ -59,6 +60,7 @@
             'UK': '#817F8E',
             'FR': '#344B5E'
         };
+        */
 
         $("#map").height(window.innerHeight)
 
@@ -72,14 +74,33 @@
         },
         regionsSelectable:true,
         onRegionSelected: SelectRegion,
+        onRegionOver: function(event, code){
+            if(!IsRegionEnabled(code))
+                event.preventDefault()
+        },
+        onRegionClick: function(event, code){
+            if(!IsRegionEnabled(code) || (SelectedRegion != null && IsSameTeam(Turn, code) && SelectedRegion != code) )
+                event.preventDefault()
+        },
         series: {
           regions: [{
               attribute: 'fill'
           }]
+        },
+        regionStyle: {
+          hover: {
+              "fill-opacity": 0.8,
+              cursor: 'pointer',
+              "stroke-width": 3
+          },
+          selected: {
+              fill: '#fffdf2'
+          },
+          selectedHover: {
+          }
         }
       });
-        map.series.regions[0].setValues(myCustomColors);
-        console.log(map.series)
+        map.series.regions[0].setValues(DetermineRegionColors());
 
     })
   </script>
