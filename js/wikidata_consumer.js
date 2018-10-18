@@ -17,9 +17,10 @@ function GetPregunta(pais){
 }
 
 function SetQuestionsForm(){
+    $("#opt-container").empty();
     $("#modal-text").html("¿Quién es el presidente del gobierno de este país?");
+    var isCorrect = true;
     for(i = 0; i < preguntas.length; i++){
-		var isCorrect = true;
 		$("#opt-container").append("<button data-correct='"+isCorrect+"' class='option'>"+preguntas[i]+"</button>")
 		isCorrect = false;
     }

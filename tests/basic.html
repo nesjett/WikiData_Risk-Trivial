@@ -53,6 +53,7 @@
     <script src="../game.js"></script> <!-- always load before creating map -->
   <script>
     jQuery(function(){
+        $("#turn").css("background", PlayerColors[Turn]); // Init turn color at begin play
 
       /* // Example color set
         var myCustomColors = {
@@ -88,7 +89,7 @@
                 event.preventDefault()
         },
         onRegionClick: function(event, code){
-            if(!IsRegionEnabled(code) || (SelectedRegion != null && IsSameTeam(Turn, code) && SelectedRegion != code)  ) // TODO: if you selected one of your regions, but you click another one, dont pevent and update the selected one
+            if(!IsRegionEnabled(code) /*|| IsRegionBlocked(code) */|| (SelectedRegion != null && IsSameTeam(Turn, code) && SelectedRegion != code)  ) // TODO: if you selected one of your regions, but you click another one, dont pevent and update the selected one
                 event.preventDefault()
 
             if(SelectedRegion === code) {
@@ -135,17 +136,34 @@
             $("#turn").css("background", PlayerColors[Turn])
         })
 
-        $(".modal-trigger").click(function(e){
-            e.preventDefault();
-            dataModal = $(this).attr("data-modal");
-            $("#" + dataModal).css({"display":"block"});
-            // $("body").css({"overflow-y": "hidden"}); //Prevent double scrollbar.
-        });
+
 
         $(document).on("click", "#opt-container button", function(e){
             //e.preventDefault();
-            console.log($(e.currentTarget).data(correct))
-            //var isRight =
+
+            var isRight = $(e.currentTarget).data("correct");
+            console.log(typeof(isRight))
+
+            if(isRight === true){
+
+                var challenged_player = GetPlayerFromCode(gChallenged);
+                if(challenged_player != null) {
+                    var t = Scores[challenged_player].indexOf(gChallenged);
+                    Scores[challenged_player].splice(t, 1);
+                }
+                Scores[Turn].push(gChallenged)
+
+                map.series.regions[0].setValues(DetermineRegionColors());
+                BlockedRegions.push(gChallenged); // TODO: do not allow to make new challenges from here (until we activate resources)
+            }else{
+                console.log("HA FALLADO")
+                $("#turn").html(PassTurn());
+                $("#turn").css("background", PlayerColors[Turn])
+            }
+            $(".modal").css({"display":"none"});
+            map.clearSelectedRegions();
+            console.log(Scores);
+            console.log(DetermineRegionColors())
         });
     })
   </script>
@@ -156,10 +174,9 @@
 </style>
     <div id="map" style="width: 100%; height: 400px"></div>
     <div id="turn" style="position:absolute;top:50px;left:50px;padding:20px;background:#cdcdcd;cursor:pointer;">0</div>
-    <a href="#" class="modal-trigger" data-modal="modal-name">Modal open!</a>
 
     <!-- Modal -->
-    <div class="modal" id="modal-name">
+    <div class="modal" id="question-modal">
         <div class="modal-sandbox"></div>
         <div class="modal-box">
             <div class="modal-header">

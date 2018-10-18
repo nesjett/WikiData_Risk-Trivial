@@ -4,6 +4,7 @@ var AvailableRegionsID = ["Q31","Q142","Q219","Q35","Q224","Q183","Q225","Q28","
 var UnavailableRegions = ["RU","SE","NO","AD","FI","IM"]; // To disable them from selection and color
 var AutozoomRegions = ["VA","MC","SM","LI","MT","AD","LU","CY","XK","ME","GR","AL","MK"];
 var PlayerColors = ["#FF0C0C","#0C7AFF","#AAFF0C", "#e02aa9"]; // max number of players (4)
+var BlockedRegions = []; // Temporal to store which countries this player already used to attack, resseted on every turn beggining
 var NumPlayers = 4; // Number of players
 
 var SelectionColor = "#FFFFFF";
@@ -13,6 +14,8 @@ var Scores = new Array(NumPlayers);
 var Resources = new Array(NumPlayers);
 
 var Turn = 0; // Current player turn
+var gChallenger = null;
+var gChallenged = null;
 
 
 var SelectedRegion = null; // currently selected region
@@ -103,18 +106,40 @@ function IsRegionEnabled(code){
     return UnavailableRegions.indexOf(String(code)) === -1;
 }
 
-function GetCodeFromShortcode(code){
+function IsRegionBlocked(code){
+    return UnavailableRegions.indexOf(String(code)) === -1;
+}
+
+function GetIdFromShortcode(code){
     if(AvailableRegions.indexOf(code) !== -1)
         return AvailableRegionsID[AvailableRegions.indexOf(code)];
     else
         return null;
 }
 
+function GetPlayerFromCode(code){
+    var player = null;
+    var i = 0;
+    while(player === null && i < Scores.length){
+        if(Scores[i].indexOf(code) !== -1)
+            player = i;
+        i++;
+    }
+    return player;
+}
+
 function ChallengeRegion(Challenger, Challenged){
     console.log("Challenging!!")
-    var id = GetCodeFromShortcode(Challenged);
+    var id = GetIdFromShortcode(Challenged);
     if(id != null)
         GetPregunta(id)
+
+    $("#question-modal").css({"display":"block"});
+
+    BlockedRegions.push(Challenger);
+    gChallenger = Challenger;
+    gChallenged = Challenged;
+    SelectedRegion = null; // clear selection
 }
 
 function AutoZoom(map, code){
@@ -129,6 +154,7 @@ function UnFocus(map){
 }
 
 function PassTurn(){
+    BlockedRegions = [];
     Turn++;
     if(Turn > NumPlayers-1)
         Turn = 0;
