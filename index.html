@@ -6,7 +6,7 @@
     <title>WikiConq</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300" type="text/css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
-    <link rel="stylesheet" media="all" href="jquery-jvectormap.css"/>
+    <link rel="stylesheet" media="all" href="css/map.css"/>
     <link rel="stylesheet" media="all" href="css/css.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
@@ -168,8 +168,8 @@
                     BlockedRegions.push(gChallenged); // TODO: do not allow to make new challenges from here (until we activate resources)
                 }else{
                     //console.log("HA FALLADO")
-
-
+                    PassTurn();
+                    $("#turn").css("background", PlayerColors[Turn]);
                     //---- ces+ama
                     /*$("#fail-modal").css({"display":"block"});
 
@@ -225,10 +225,10 @@
 <!-- Feedback Modals -->
 <div class="feedback-modal">
     <div class="correct">
-        <i style="color:green;" class="fas fa-thumbs-up"></i>
+        <i style="color:#69fa64;" class="fas fa-thumbs-up"></i>
     </div>
     <div class="incorrect">
-        <i style="color:red;" class="fas fa-thumbs-down"></i>
+        <i style="color:#ff3b47;" class="fas fa-thumbs-down"></i>
     </div>
 </div>
 

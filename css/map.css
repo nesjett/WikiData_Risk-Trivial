@@ -1,5 +1,11 @@
 svg {
     touch-action: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    pointer-events: none;
 }
 
 body{
@@ -38,6 +44,7 @@ body{
     line-height: 10px;
     text-align: center;
     box-sizing: content-box;
+    display:none;
 }
 
 .jvectormap-zoomin, .jvectormap-zoomout {
