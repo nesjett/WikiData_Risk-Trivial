@@ -4,8 +4,10 @@
 <head>
     <meta charset="utf-8">
     <title>WikiConq</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300" type="text/css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
     <link rel="stylesheet" media="all" href="jquery-jvectormap.css"/>
-    <link rel="stylesheet" media="all" href="css/modal.css"/>
+    <link rel="stylesheet" media="all" href="css/css.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 
@@ -193,56 +195,43 @@
     </script>
 </head>
 <body>
-<div id="map" style="width: 100%; height: 400px"></div>
-<div id="turn" style="">Turno actual (click para pasar)</div>
-<div id="team-container"></div>
-<div id="descripcion">
-    <div id="log"><img src="logo.png" width="50px" height="50px"><span>WikiConq</span></div>
-
-    Es el turno del color que marca el botón. Para conquistar un país selecciona un país propio y al que vas a invadir.
-    Contesta correctamente la pregunta y será tuyo.
-</div>
-<!-- Modal -->
-<div class="modal" id="question-modal">
-    <div class="modal-sandbox"></div>
-    <div class="modal-box">
-        <div class="modal-header">
-            <h1 id="modal-head">¡HAS RETADO A UN OPONENTE!</h1>
-        </div>
-        <div class="modal-body">
-            <p id="modal-text">Cargando...</p>
-            <br />
-            <div id="opt-container">
-            </div>
-        </div>
+    <div id="map" style="width: 100%; height: 400px"></div>
+    <div id="turn" style="">Turno actual (click para pasar)</div>
+    <div id="team-container"></div>
+    <div id="descripcion">
+        <img id="logo" src="./img/logo.png" width="50px" height="50px" />
+        Es el turno del color que marca el botón.
+        <br />Para conquistar un país selecciona un país propio y al que vas a invadir.
+        <br />Contesta correctamente la pregunta y será tuyo.
     </div>
-</div>
-
-
-
-<!-- Modales feedback -->
-<!--    <div class="modal" id="succes-modal">
+    <!-- Modal -->
+    <div class="modal" id="question-modal">
         <div class="modal-sandbox"></div>
         <div class="modal-box">
             <div class="modal-header">
-                <h1 id="modal-head" class="succes-head">¡HAS GANADO A TU OPONENTE!</h1>
+                <h1 id="modal-head">¡HAS RETADO A UN OPONENTE!</h1>
             </div>
-
+            <div class="modal-body">
+                <p id="modal-text">Cargando...</p>
+                <br />
+                <div id="opt-container">
+                </div>
+            </div>
         </div>
     </div>
 
 
 
-    <div class="modal" id="fail-modal">
-        <div class="modal-sandbox"></div>
-        <div class="modal-box">
-            <div class="modal-header">
-                <h1 id="modal-head" class="fail-head">¡TU OPONENTE HA GANADO!</h1>
-            </div>
-
-        </div>
+<!-- Feedback Modals -->
+<div class="feedback-modal">
+    <div class="correct">
+        <i style="color:green;" class="fas fa-thumbs-up"></i>
     </div>
-  -->
+    <div class="incorrect">
+        <i style="color:red;" class="fas fa-thumbs-down"></i>
+    </div>
+</div>
+
 
 </body>
 </html>

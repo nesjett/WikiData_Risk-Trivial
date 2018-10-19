@@ -1,5 +1,5 @@
 html{
-    font-family: helvetica;
+    font-family: 'Open Sans';
 }
 .modal,
 .modal-box {
@@ -41,6 +41,7 @@ html{
     padding: 20px 40px;
     background: #546E7A;
     color: #ffffff;
+    text-align: center;
 }
 
 .modal-body {
@@ -93,6 +94,7 @@ button {
 
 button:hover {
     padding: 20px 60px;
+    cursor:pointer;
 }
 
 
@@ -114,52 +116,30 @@ button:hover {
     background: #000000;
 }
 #descripcion{
-    margin:20px;
     position:absolute;
-    top:500px;
+    bottom:50px;
     left:30px;
-    width: 10%;
-    background-color: #DFDCE3;
-    padding: 15px 15px 20px 15px;
+    background-color: rgba(223, 220, 227, 0.7);
+    padding: 15px;
     border-radius: 15px;
-    text-align: center;
+    text-align: left;
+    display: flex;
+    align-items:center;
 }
 
 
-#log{
-    margin:2px 2px 6px 2px;
-    display: flex;
-    justify-content:center;
-    align-items:center;
+#logo{
+    margin-right:12px;
 }
 
 /*
 background gradient animation
  */
 .modal {
-    background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
+    background: linear-gradient(-45deg, rgba(227, 106, 41, 0.85), rgba(227, 8, 58, 0.85), rgba(227, 214, 218, 0.85), rgba(0, 0, 0, 0.85));
     background-size: 400% 400%;
-    -webkit-animation: Gradient 3s ease 1;
-    -moz-animation: Gradient 3s ease 1;
-    animation: Gradient 3s ease 1;
-}
-
-@-webkit-keyframes Gradient {
-    0% {
-        background-position: 0% 50%
-    }
-    100% {
-        background-position: 100% 50%
-    }
-}
-
-@-moz-keyframes Gradient {
-    0% {
-        background-position: 0% 50%
-    }
-    100% {
-        background-position: 100% 50%
-    }
+    animation: Gradient 1.5s ease 1;
+    animation-fill-mode: forwards;
 }
 
 @keyframes Gradient {

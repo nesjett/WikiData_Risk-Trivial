@@ -10,7 +10,7 @@ function GetPregunta(pais){
     var x = Math.floor((Math.random() * 3) + 0);
     console.log("_______pregunta"+x);
     var pregunta;
-    //Se podrian anyadir mas en teoria jajaja xddddddddddd
+    // question random selector
     switch(x){
         case 0:
             enunciado="¿Quién es el presidente del gobierno de este país?";
@@ -24,6 +24,7 @@ function GetPregunta(pais){
 }
 
 function SetQuestionsForm(){
+    $("#modal-head").html("¡"+PlayerNames[Turn]+" responden!");
     $("#modal-text").html(enunciado.toString());
     var isCorrect = false;
     var r = Math.floor((Math.random() * 3) + 0);
