@@ -1,30 +1,248 @@
-<html>
-<head>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
-    <script src="./js/datamaps.world.min.js"></script>
-</head>
-<body>
-    <div id="container" style="position: relative; width: 100%; height: 100%;"></div>
-    <script>
-        //var map = new Datamap({element: document.getElementById('container')});
-        var zoom = new Datamap({
-            element: document.getElementById("container"),
-            scope: 'world',
-            // Zoom in on Africa
-            setProjection: function(element) {
-                var projection = d3.geo.equirectangular()
-                    .center([23, 10])
-                    .rotate([4.4, 0])
-                    .scale(400)
-                    .translate([element.offsetWidth / 2, element.offsetHeight / 2])
-                    .projection('mercator');
-                var path = d3.geo.path()
-                    .projection(projection);
+<!DOCTYPE html>
 
-                return {path: path, projection: projection};
-            }
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>WikiConq</title>
+    <link rel="stylesheet" media="all" href="jquery-jvectormap.css"/>
+    <link rel="stylesheet" media="all" href="css/modal.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+
+    <script src="jquery-jvectormap.js"></script>
+
+    <script src="src/jvectormap.js"></script>
+
+    <script src="src/abstract-element.js"></script>
+    <script src="src/abstract-canvas-element.js"></script>
+    <script src="src/abstract-shape-element.js"></script>
+
+    <script src="src/svg-element.js"></script>
+    <script src="src/svg-group-element.js"></script>
+    <script src="src/svg-canvas-element.js"></script>
+    <script src="src/svg-shape-element.js"></script>
+    <script src="src/svg-path-element.js"></script>
+    <script src="src/svg-circle-element.js"></script>
+    <script src="src/svg-image-element.js"></script>
+    <script src="src/svg-text-element.js"></script>
+
+    <script src="src/vml-element.js"></script>
+    <script src="src/vml-group-element.js"></script>
+    <script src="src/vml-canvas-element.js"></script>
+    <script src="src/vml-shape-element.js"></script>
+    <script src="src/vml-path-element.js"></script>
+    <script src="src/vml-circle-element.js"></script>
+    <script src="src/vml-image-element.js"></script>
+
+    <script src="src/map-object.js"></script>
+    <script src="src/region.js"></script>
+    <script src="src/marker.js"></script>
+
+    <script src="src/vector-canvas.js"></script>
+    <script src="src/simple-scale.js"></script>
+    <script src="src/ordinal-scale.js"></script>
+    <script src="src/numeric-scale.js"></script>
+    <script src="src/color-scale.js"></script>
+    <script src="src/legend.js"></script>
+    <script src="src/data-series.js"></script>
+    <script src="src/proj.js"></script>
+    <script src="src/map.js"></script>
+
+    <script src="tests/assets/jquery-jvectormap-europe-mill.js"></script>
+    <!-- <script src="assets/jquery-jvectormap-world-mill-en.js"></script> -->
+
+    <script src="js/wikidata_consumer.js"></script>
+    <script src="js/game.js"></script> <!-- always load before creating map -->
+    <script>
+        jQuery(function(){
+            CreateScoreBoards();
+            $("#turn").css("background", PlayerColors[Turn]); // Init turn color at begin play
+
+            /* // Example color set
+              var myCustomColors = {
+                  'ES': '#4E7387',
+                  'RU': '#333333',
+                  'UA': '#89AFBF',
+                  'UK': '#817F8E',
+                  'FR': '#344B5E'
+              };
+              */
+
+            $("#map").height(window.innerHeight)
+
+            var map = new jvm.Map({
+                map: 'europe_mill',
+                markers: [
+                    {latLng: [40.416775, -3.703790], name: 'Spain'}
+                ],
+                container: $('#map'),
+                zoomOnScroll: false,
+                panOnDrag: false,
+                focusOn: {
+                    regions: ["PT","DK","EE","UA"]
+                },
+                regionsSelectable:true,
+                markersSelectable:false,
+                onMarkerOver:function(e){
+                    e.preventDefault();
+                },
+                onRegionSelected: SelectRegion,
+                onRegionOver: function(event, code){
+                    if(!IsRegionEnabled(code))
+                        event.preventDefault()
+                },
+                onRegionClick: function(event, code){
+                    if(!IsRegionEnabled(code) || IsRegionBlocked(code)   ) { // TODO: if you selected one of your regions, but you click another one, dont pevent and update the selected one
+                        event.preventDefault()
+                        return null;
+                    }
+
+                    if(SelectedRegion === code) {
+                        SelectedRegion = null;
+                        UnFocus(map);
+                    }else {
+                        if (SelectedRegion != null) {
+                            if (!IsSameTeam(Turn, code))
+                                ChallengeRegion(SelectedRegion, code)
+                        }else {
+                            if(CanSelect(code)) {
+                                SelectedRegion = code;
+                                AutoZoom(map, code);
+                            }else{
+                                event.preventDefault();
+                            }
+                        }
+                    }
+
+                },
+                series: {
+                    regions: [{
+                        attribute: 'fill'
+                    }]
+                },
+                regionStyle: {
+                    hover: {
+                        "fill-opacity": 0.8,
+                        cursor: 'pointer',
+                        "stroke-width": 3
+                    },
+                    selected: {
+                        fill: SelectionColor
+                    },
+                    selectedHover: {
+                    }
+                }
+            });
+            map.series.regions[0].setValues(DetermineRegionColors());
+
+
+            $(document).on("click", "#turn", function(){
+                //$("#turn").html(PassTurn());
+                PassTurn()
+                $("#turn").css("background", PlayerColors[Turn])
+            })
+
+
+
+            $(document).on("click", "#opt-container button", function(e){
+                //e.preventDefault();
+
+                var isRight = $(e.currentTarget).data("correct");
+                console.log("-----------------------------------------");
+                console.log(typeof(isRight));
+                console.log(isRight);
+                console.log("-----------------------------------------");
+                if(isRight === true){
+
+                    var challenged_player = GetPlayerFromCode(gChallenged);
+                    if(challenged_player != null) {
+                        var t = Scores[challenged_player].indexOf(gChallenged);
+                        Scores[challenged_player].splice(t, 1);
+                    }
+                    Scores[Turn].push(gChallenged)
+
+                    map.series.regions[0].setValues(DetermineRegionColors());
+                    CreateScoreBoards();
+                    BlockedRegions.push(gChallenged); // TODO: do not allow to make new challenges from here (until we activate resources)
+                }else{
+                    //console.log("HA FALLADO")
+
+
+                    //---- ces+ama
+                    /*$("#fail-modal").css({"display":"block"});
+
+                    $("html").click(function(){
+                     $("#fail-modal").css({"display":"none"});
+                    });*/
+                    //----
+                }
+                //UnFocus();
+                $(".modal").css({"display":"none"});
+                map.clearSelectedRegions();
+
+                if(Scores[Turn].length <= BlockedRegions.length){
+                    PassTurn();
+                    $("#turn").css("background", PlayerColors[Turn]);
+                }
+
+
+                console.log(Scores);
+                console.log(DetermineRegionColors())
+            });
         })
     </script>
+</head>
+<body>
+<div id="map" style="width: 100%; height: 400px"></div>
+<div id="turn" style="">Turno actual (click para pasar)</div>
+<div id="team-container"></div>
+<div id="descripcion">
+    <div id="log"><img src="logo.png" width="50px" height="50px"><span>WikiConq</span></div>
+
+    Es el turno del color que marca el botón. Para conquistar un país selecciona un país propio y al que vas a invadir.
+    Contesta correctamente la pregunta y será tuyo.
+</div>
+<!-- Modal -->
+<div class="modal" id="question-modal">
+    <div class="modal-sandbox"></div>
+    <div class="modal-box">
+        <div class="modal-header">
+            <h1 id="modal-head">¡HAS RETADO A UN OPONENTE!</h1>
+        </div>
+        <div class="modal-body">
+            <p id="modal-text">Cargando...</p>
+            <br />
+            <div id="opt-container">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modales feedback -->
+<!--    <div class="modal" id="succes-modal">
+        <div class="modal-sandbox"></div>
+        <div class="modal-box">
+            <div class="modal-header">
+                <h1 id="modal-head" class="succes-head">¡HAS GANADO A TU OPONENTE!</h1>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <div class="modal" id="fail-modal">
+        <div class="modal-sandbox"></div>
+        <div class="modal-box">
+            <div class="modal-header">
+                <h1 id="modal-head" class="fail-head">¡TU OPONENTE HA GANADO!</h1>
+            </div>
+
+        </div>
+    </div>
+  -->
+
 </body>
 </html>
