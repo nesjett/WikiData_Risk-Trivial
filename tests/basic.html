@@ -158,10 +158,11 @@
                 Scores[Turn].push(gChallenged)
 
                 map.series.regions[0].setValues(DetermineRegionColors());
+                CreateScoreBoards();
                 BlockedRegions.push(gChallenged); // TODO: do not allow to make new challenges from here (until we activate resources)
             }else{
                 console.log("HA FALLADO")
-                $("#turn").html(PassTurn());
+                PassTurn();
                 $("#turn").css("background", PlayerColors[Turn])
             }
             $(".modal").css({"display":"none"});

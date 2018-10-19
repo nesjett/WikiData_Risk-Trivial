@@ -55,6 +55,7 @@ function InitPlayers(){
 }
 
 function CreateScoreBoards(){
+    $("#team-container").empty();
     for(i = 0; i < Scores.length; i++){
         $("#team-container").append("<div class='team-score' style='background:"+PlayerColors[i]+"'>"+Scores[i].length+"</div>");
     }
