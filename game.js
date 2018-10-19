@@ -5,7 +5,7 @@ var UnavailableRegions = ["RU","SE","NO","AD","FI","IM"]; // To disable them fro
 var AutozoomRegions = ["VA","MC","SM","LI","MT","AD","LU","CY","XK","ME","GR","AL","MK"];
 var PlayerColors = ["#FF0C0C","#0C7AFF","#AAFF0C", "#e02aa9"]; // max number of players (4)
 var BlockedRegions = []; // Temporal to store which countries this player already used to attack, resseted on every turn beggining
-var NumPlayers = 4; // Number of players
+var NumPlayers = 4; // Number of players (max 4)
 
 var SelectionColor = "#FFFFFF";
 var DisabledRegionColor = "#777777";
@@ -48,8 +48,16 @@ function InitPlayers(){
         Resources[Resources.length - 1].push(GetRandomInt(1,10))
     }
 
+    CreateScoreBoards();
+
     console.log(["Player regions (Scores):", Scores])
     console.log(["Player resources (Resources):", Resources])
+}
+
+function CreateScoreBoards(){
+    for(i = 0; i < Scores.length; i++){
+        $("#team-container").append("<div class='team-score' style='background:"+PlayerColors[i]+"'>"+Scores[i].length+"</div>");
+    }
 }
 
 function DetermineRegionColors(){
@@ -107,7 +115,8 @@ function IsRegionEnabled(code){
 }
 
 function IsRegionBlocked(code){
-    return UnavailableRegions.indexOf(String(code)) === -1;
+    console.log(BlockedRegions.indexOf(String(code)))
+    return BlockedRegions.indexOf(String(code)) !== -1;
 }
 
 function GetIdFromShortcode(code){

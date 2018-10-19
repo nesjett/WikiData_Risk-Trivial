@@ -4,6 +4,7 @@ var preguntas;
 
 function GetPregunta(pais){
 	console.log("ENTROOOOOO")
+    $("#opt-container").empty(); // clear options form
 	preguntas = new Array();
 	//var x = Math.floor((Math.random() * 9) + 0);
 	var x=0;
@@ -17,7 +18,6 @@ function GetPregunta(pais){
 }
 
 function SetQuestionsForm(){
-    $("#opt-container").empty();
     $("#modal-text").html("¿Quién es el presidente del gobierno de este país?");
     var isCorrect = true;
     for(i = 0; i < preguntas.length; i++){
