@@ -172,6 +172,7 @@
                     map.series.regions[0].setValues(DetermineRegionColors());
                     CreateScoreBoards();
                     BlockedRegions.push(gChallenged); // TODO: do not allow to make new challenges from here (until we activate resources)
+                    ShowPlayerFeedback(true);
                 }else{
                     //console.log("HA FALLADO")
                     PassTurn();
@@ -183,6 +184,7 @@
                      $("#fail-modal").css({"display":"none"});
                     });*/
                     //----
+                    ShowPlayerFeedback(false);
                 }
                 //UnFocus();
                 $(".modal").css({"display":"none"});
@@ -198,8 +200,6 @@
                 console.log(DetermineRegionColors())
             });
         })
-
-
     </script>
 </head>
 <body>
