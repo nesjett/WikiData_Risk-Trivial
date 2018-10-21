@@ -152,3 +152,45 @@ background gradient animation
         background-position: 100% 50%
     }
 }
+
+/***
+Answer feedback icons
+ */
+
+.feedback-modal{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(51,51,51,.8);
+    z-index:1000;
+}
+.feedback-modal > .feed-container{
+    background:#ccc;
+    border-radius:50%;
+    text-align: center;
+    padding:25px;
+    font-size:12em;
+    width: 285px;
+    height: 285px;
+    position:absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -165px;
+    margin-top: -165px;
+    display: none;
+}
+.feedback-modal > .feed-container > .correct{
+    color:#69fa64;
+    display:none;
+}
+.feedback-modal > .feed-container > .incorrect{
+    color:#ff3b47;
+    display: none;
+}
+
+#ttt {
+    animation-duration: .6s;
+}
+

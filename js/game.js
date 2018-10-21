@@ -209,6 +209,65 @@ function GetRandomInt(min, max) {
 }
 
 
+// add callback to animated animations
+$.fn.extend({
+    animateCss: function (animationName, callback) {
+        var animationEnd = (function (el) {
+            var animations = {
+                animation: 'animationend',
+                OAnimation: 'oAnimationEnd',
+                MozAnimation: 'mozAnimationEnd',
+                WebkitAnimation: 'webkitAnimationEnd',
+            };
+
+            for (var t in animations) {
+                if (el.style[t] !== undefined) {
+                    return animations[t];
+                }
+            }
+        })(document.createElement('div'));
+
+        this.addClass('animated ' + animationName).one(animationEnd, function () {
+            $(this).removeClass('animated ' + animationName);
+
+            if (typeof callback === 'function') callback();
+        });
+
+        return this;
+    },
+});
+
+
 /**
- AJAX
+ VISUALS
  **/
+
+
+
+function ShowPlayerFeedback(correct){
+    if(correct){
+        $("#feedback .correct").css("display", "block");
+    }else{
+        $("#feedback .incorrect").css("display", "block");
+    }
+
+    //$('#ttt').addClass('animated bounceOutLeft');
+    $("#ttt").css("display", "block");
+    $('#ttt').animateCss('animated jackInTheBox', function() {
+        setTimeout(function(){ HidePlayerFeedback() }, 350);
+    });
+}
+
+function HidePlayerFeedback(){
+    $('#ttt').removeClass('jackInTheBox');
+    $('#ttt').animateCss('fadeOutUp', function() {
+        HidePlayerFeedbackEnd();
+    });
+}
+
+function HidePlayerFeedbackEnd(){
+    $('#ttt').removeClass('animated fadeOutUp');
+    $("#ttt").css("display", "none");
+    $("#feedback .correct").css("display", "none");
+    $("#feedback .incorrect").css("display", "none");
+}
