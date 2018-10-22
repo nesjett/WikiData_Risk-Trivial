@@ -10,6 +10,7 @@
     <link rel="stylesheet" media="all" href="css/css.css"/>
     <link rel="stylesheet" media="all" href="css/animate.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="js/anime.min.js"></script>
 
 
     <script src="jquery-jvectormap.js"></script>
@@ -106,7 +107,9 @@
                     }else {
                         if (SelectedRegion != null) {
                             if (!IsSameTeam(Turn, code)) {
+                                $("#click_canvas").css("display", "block");
                                 ChallengeRegion(SelectedRegion, code)
+                                handleEvent(event, map)
                             }else{
                                 map.clearSelectedRegions();
                                 SelectedRegion = code;
@@ -195,7 +198,11 @@
                     $("#turn").css("background", PlayerColors[Turn]);
                 }
 
-
+                UnFocus(map);
+                //$("#click_canvas").css("display", "none");
+                $("#click_canvas").animate({
+                    opacity: 'hide'
+                }, 200);
                 console.log(Scores);
                 console.log(DetermineRegionColors())
             });
@@ -206,7 +213,7 @@
     <div id="map" style="width: 100%; height: 400px"></div>
     <div id="turn" style="">Turno actual (click para pasar)</div>
     <div id="team-container"></div>
-    <a onclick="ShowPlayerFeedback(true)">Test feedback</a>
+    <canvas id="click_canvas"></canvas>
 
     <!-- Modal -->
     <div class="modal" id="question-modal">
@@ -226,18 +233,18 @@
 
 
 
-<!-- Feedback Modals -->
-<div id="feedback" class="feedback-modal">
+    <!-- Feedback Modals -->
+
     <div id="ttt" class="feed-container animated">
         <div class="correct">
             <i class="fas fa-thumbs-up"></i>
         </div>
         <div class="incorrect">
             <i class="fas fa-thumbs-down"></i>
+        </div>
     </div>
-    </div>
-</div>
 
-
+    <!-- animation needs to be loaded at the end for elements to load -->
+    <script src="js/click_animation.js"></script>
 </body>
 </html>

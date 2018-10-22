@@ -122,7 +122,8 @@ function ChallengeRegion(Challenger, Challenged){
     if(id != null)
         GetPregunta(id)
 
-    $("#question-modal").css({"display":"block"});
+    setTimeout(function(){ $("#question-modal").css({"display":"block"}); }, 450)
+
 
     BlockedRegions.push(Challenger);
     gChallenger = Challenger;
@@ -158,21 +159,10 @@ function CanSelect(code){
  * Map event handlers
  */
 function SelectRegion(event, code, isSelected, region){
-    //if(!IsRegionEnabled(code)) // not needed here but onClick
-     //   event.preventDefault()
-
-    /*if(region.length == 0) {
-        SelectedRegion = null;
-    }else {
-        if (SelectedRegion != null)
-            ChallengeRegion(SelectedRegion, code)
-        else
-            SelectedRegion = code;
-    }*/
-    console.log(event)
+    /*console.log(event)
     console.log(code)
     console.log(isSelected)
-    console.log(region)
+    console.log(region)*/
 
 }
 
@@ -246,9 +236,9 @@ $.fn.extend({
 
 function ShowPlayerFeedback(correct){
     if(correct){
-        $("#feedback .correct").css("display", "block");
+        $(".correct").css("display", "block");
     }else{
-        $("#feedback .incorrect").css("display", "block");
+        $(".incorrect").css("display", "block");
     }
 
     //$('#ttt').addClass('animated bounceOutLeft');
@@ -268,6 +258,6 @@ function HidePlayerFeedback(){
 function HidePlayerFeedbackEnd(){
     $('#ttt').removeClass('animated fadeOutUp');
     $("#ttt").css("display", "none");
-    $("#feedback .correct").css("display", "none");
-    $("#feedback .incorrect").css("display", "none");
+    $(".correct").css("display", "none");
+    $(".incorrect").css("display", "none");
 }
