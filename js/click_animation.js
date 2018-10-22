@@ -11,14 +11,14 @@ var colorPicker = (function() {
     var index = 0;
     function next() {
         console.log(gChallenged + " | " + gChallenger)
-        index = index++ < colors.length-1 ? index : 0;
-        return colors[index];
+        //index = index++ < colors.length-1 ? index : 0;
+        //return colors[index];
 
-        return colors[GetPlayerFromCode(gChallenged)]
+        return colors[Turn]
     }
     function current() {
         //return colors[index]
-        return colors[Turn]
+        return colors[GetPlayerFromCode(gChallenged)]
     }
     return {
         next: next,
@@ -50,7 +50,7 @@ function handleEvent(e, map) {
 
 
     var pLocation = AvailableRegionsLocation[AvailableRegions.indexOf(gChallenged)];
-    console.log(AvailableRegionsLocation.length)
+    console.log("t: "+AvailableRegionsLocation[AvailableRegions.indexOf(gChallenged)])
     var point = map.latLngToPoint(pLocation[0],pLocation[1]);
     console.log(point)
 
