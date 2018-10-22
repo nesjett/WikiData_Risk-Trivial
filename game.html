@@ -59,6 +59,7 @@
     <script src="js/game.js"></script> <!-- always load before creating map -->
     <script>
         jQuery(function(){
+            GetVecindades();
             CreateScoreBoards();
             $("#turn").css("background", PlayerColors[Turn]); // Init turn color at begin play
 

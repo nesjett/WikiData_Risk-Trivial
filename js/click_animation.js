@@ -37,11 +37,6 @@ function calcPageFillRadius(x, y) {
     return Math.sqrt(Math.pow(l, 2) + Math.pow(h, 2));
 }
 
-function addClickListeners() {
-    document.addEventListener("touchstart", handleEvent);
-    document.addEventListener("mousedown", handleEvent);
-};
-
 function handleEvent(e, map) {
     if (e.touches) {
         e.preventDefault();
@@ -182,5 +177,4 @@ var resizeCanvas = function() {
         window.CP.PenTimer.MAX_TIME_IN_LOOP_WO_EXIT = 6000;
     }*/
     window.addEventListener("resize", resizeCanvas);
-    //addClickListeners();
 })();

@@ -105,10 +105,7 @@ function GetGobernadores(gobernador){
 
 //capitales
 function GetCapital(pais) {
-
-
     //Pido la capital del país que me pasan
-
     var endpointUrl = 'https://query.wikidata.org/sparql',
         sparqlQuery = "SELECT ?capitalLabel WHERE{\n" +
             "  ?pais wdt:P31 wd:Q3624078.\n" +
@@ -289,29 +286,41 @@ $.ajax( endpointUrl, settings ).then( function ( data ) {
 
 
 function GetVecindades(){
-    const endpointUrl = 'https://query.wikidata.org/sparql',
-        sparqlQuery = `SELECT ?paisLabel ?vecinos WHERE {
-	  ?pais wdt:P31 wd:Q6256.
-      ?pais wdt:P30 wd:Q46.
-	  ?pais wdt:P47 ?vecinos.
-	  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-	}
-ORDER BY (?paisLabel)`,
-        fullUrl = endpointUrl + '?query=' + encodeURIComponent( sparqlQuery ),
-        headers = { 'Accept': 'application/sparql-results+json' };
+    var endpointUrl = 'https://query.wikidata.org/sparql',
+        sparqlQuery = "SELECT ?paisLabel ?vecinos WHERE {\n" +
+            "  ?pais wdt:P31 wd:Q6256.\n" +
+            "  ?pais wdt:P30 wd:Q46.\n" +
+            "  ?pais wdt:P47 ?vecinos.\n" +
+            "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". }\n" +
+            "}\n" +
+            "ORDER BY ?countryLabel",
+        settings = {
+            headers: { Accept: 'application/sparql-results+json' },
+            data: { query: sparqlQuery }
+        };
 
-    fetch( fullUrl, { headers } ).then( body => body.json() ).then( json => {
-        const { head: { vars }, results } = json;
-        for ( const result of results.bindings ) {
-            for ( const variable of vars ) {
-                console.log( '%s: %o', variable, result[variable] );
-                /*if(variable.localeCompare("paisLabel")==0&&){
-                    var pais={nombre:result[variable].value,vecinos=[]};
-                }*/
+    var BorderSharing = [];
+    $.ajax( endpointUrl, settings ).then( function ( data ) {
+        $( 'body' ).append( ( $('<pre>').text( JSON.stringify( data) ) ) );
+        console.log( data );
+        var results = data.results.bindings;
+        var index = 0;
+        for(i = 0; i < results.length; i++){
+            if(i === 0){
+                BorderSharing.push([results[i].paisLabel.value, [results[i].vecinos.value]])
+            }else{
+                if(results[i].paisLabel.value !== BorderSharing[index][0]){
+                    BorderSharing.push([results[i].paisLabel.value, [results[i].vecinos.value]])
+                    index++;
+                }else{
+                    BorderSharing[index][1].push(results[i].vecinos.value)
+                }
             }
-            console.log( '---' );
         }
+        console.log(BorderSharing[0][0])
+        console.log(BorderSharing)
     } );
+
 
     /*paises = []
 
@@ -321,6 +330,8 @@ ORDER BY (?paisLabel)`,
     return vecinos;*/
 
 }
+
+
 
 
 
@@ -349,7 +360,7 @@ function GetCiudadesSuperficies(pais){
 
         }
     } );
-//Los 4 primeros elementos del array son las ciudades más pobladas, siendo el primer el elemento la que más.
+//Los 4 primeros elementos del array son las ciudades más pobladas, siendo el primer elemento la que más.
     return ciudadesSuperficie;
 
 }

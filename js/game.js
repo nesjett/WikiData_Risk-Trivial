@@ -10,7 +10,7 @@ var BlockedRegions = []; // Temporal to store which countries this player alread
 var NumPlayers = 4; // Number of players (max 4)
 
 var SelectionColor = "#FFFFFF";
-var DisabledRegionColor = "#777777";
+var DisabledRegionColor = "rgba(15,15,15,0.5)";
 
 var Scores = new Array(NumPlayers);
 var Resources = new Array(NumPlayers);
