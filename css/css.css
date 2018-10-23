@@ -1,5 +1,9 @@
 html{
     font-family: 'Open Sans';
+    background-color:rgb(80, 80, 80);
+}
+body{
+    overflow: hidden;
 }
 .modal,
 .modal-box {

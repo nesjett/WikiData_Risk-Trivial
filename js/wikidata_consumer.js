@@ -285,50 +285,42 @@ $.ajax( endpointUrl, settings ).then( function ( data ) {
 }*/
 
 
-function GetVecindades(){
+function GetNeighbours(){
     var endpointUrl = 'https://query.wikidata.org/sparql',
-        sparqlQuery = "SELECT ?paisLabel ?vecinos WHERE {\n" +
-            "  ?pais wdt:P31 wd:Q6256.\n" +
-            "  ?pais wdt:P30 wd:Q46.\n" +
-            "  ?pais wdt:P47 ?vecinos.\n" +
-            "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". }\n" +
-            "}\n" +
-            "ORDER BY ?countryLabel",
+        sparqlQuery = "#vamos a sacar una lista cuyas filas van a ser pais - su vecino\n" +
+            "SELECT ?pais ?vecinos WHERE{ #saco las entidades wikidata, no los nombres, si no sería ?paisLabel y ?vecinosLabel\n" +
+            " ?pais wdt:P31 wd:Q3624078. #?pais es un estado soberano\n" +
+            " ?pais wdt:P30 wd:Q46. #?pais pertenece a Europa\n" +
+            " ?pais wdt:P47 ?vecinos. #?pais comparte fronteras con ?vecinos\n" +
+            "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". } #quiero los registros en ingles\n" +
+            "}",
         settings = {
             headers: { Accept: 'application/sparql-results+json' },
             data: { query: sparqlQuery }
         };
 
+
     var BorderSharing = [];
     $.ajax( endpointUrl, settings ).then( function ( data ) {
-        $( 'body' ).append( ( $('<pre>').text( JSON.stringify( data) ) ) );
-        console.log( data );
-        var results = data.results.bindings;
-        var index = 0;
-        for(i = 0; i < results.length; i++){
-            if(i === 0){
-                BorderSharing.push([results[i].paisLabel.value, [results[i].vecinos.value]])
-            }else{
-                if(results[i].paisLabel.value !== BorderSharing[index][0]){
-                    BorderSharing.push([results[i].paisLabel.value, [results[i].vecinos.value]])
+        let results = data.results.bindings;
+        let index = 0;
+        let wikicode_pais;
+        let wikicode_vecino;
+        for (i = 0; i < results.length; i++) {
+            wikicode_pais = results[i].pais.value.split("/")[4].toString();
+            wikicode_vecino = results[i].vecinos.value.split("/")[4].toString();
+            if (i === 0) {
+                BorderSharing.push([wikicode_pais, [wikicode_vecino]])
+            } else {
+                if (wikicode_pais !== BorderSharing[index][0]) {
+                    BorderSharing.push([wikicode_pais, [wikicode_vecino]])
                     index++;
-                }else{
-                    BorderSharing[index][1].push(results[i].vecinos.value)
+                } else {
+                    BorderSharing[index][1].push(wikicode_vecino)
                 }
             }
         }
-        console.log(BorderSharing[0][0])
-        console.log(BorderSharing)
     } );
-
-
-    /*paises = []
-
-    for()
-    paises.push()
-
-    return vecinos;*/
-
 }
 
 

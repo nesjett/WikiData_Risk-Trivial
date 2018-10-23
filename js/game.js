@@ -1,10 +1,12 @@
-var AvailableRegions = ["BE","FR","BG","DK","HR","DE","BA","HU","JE","BY","GR","NL","PT","LI","LV","LT","LU","FO","PL","XK","CH","EE","AL","IT","GG","CZ","GB","AX","IE","ES","ME","MD","RO","RS","MK","SK","MT","SI","SM","UA","AT"];
-var AvailableRegionsID = ["Q31","Q142","Q219","Q35","Q224","Q183","Q225","Q28","Q785","Q184","Q41","Q55","Q45","Q347","Q211","Q37","Q32","Q4628","Q36","Q1246","Q39","Q191","Q222","Q38","Q25230","Q213","Q145","Q27","Q29","Q236","Q217","Q218","Q403","Q221","Q214","Q233","Q215","Q238","Q212","Q40"];
+var AvailableRegions = ["BE","FR","BG","DK","HR","DE","BA","HU","JE","BY","GR","NL","PT","LI","LV","LT","LU","PL","XK","CH","EE","AL","IT","GG","CZ","GB","IE","ES","ME","MD","RO","RS","MK","SK","MT","SI","SM","UA","AT"];
+var AvailableRegionsID = ["Q31","Q142","Q219","Q35","Q224","Q183","Q225","Q28","Q785","Q184","Q41","Q55","Q45","Q347","Q211","Q37","Q32","Q4628","Q36","Q1246","Q39","Q191","Q222","Q38","Q25230","Q213","Q27","Q29","Q236","Q217","Q218","Q403","Q221","Q214","Q233","Q215","Q238","Q212","Q40"];
 var AvailableRegionsLocation = [["50.75","4.5"],["46","2"],["43","25"],["56","10"],["45.16","15.5"],["51","9"],["43.91","17.67"],["47","20"],["49.21","-2.13"],["53","28"],["39","22"],["52.5","5.75"],["39.5","-8"],["47.16","9.53"],["57","25"],["56","24"],["49.75","6.16"],["62","-7"],["52","20"],["42.60","20.90"],["46.81","8.22"],["58.59","25.0"],["41.15","20.16"],["41.87","12.56"],["49.46","-2.58"],["49.81","15.47"],["55.37","-3.43"],["53.41","-8.24"],["42.7","19.37"],["47.41","28.36"],["45.94","24.99"],["44.01","21.00"],["41.60","21.74"],["48.66","19.69"],["35.93","14.37"],["46.15","14.99"],["43.94","12.45"],["48.37","31.16"],["47.51","14.55"]];
 
-var UnavailableRegions = ["RU","SE","NO","AD","FI","IM","IS"]; // To disable them from selection and color
+var UnavailableRegions = ["RU","SE","NO","AD","FI","IM","IS","AX"]; // To disable them from selection and color
 var AutozoomRegions = ["VA","MC","SM","LI","MT","AD","LU","CY","XK","ME","GR","AL","MK"];
-var PlayerColors = ["#FF0C0C","#0C7AFF","#AAFF0C", "#e02aa9"]; // max number of players (4)
+//var PlayerColors = ["#FF0C0C","#0C7AFF","#AAFF0C", "#e02aa9"]; // max number of players (4)
+var PlayerColors = ["#CA1330","#3A3276","#93BC34", "#e02aa9"];
+var PlayerColors_disabled = ["#FF0C0C","#0C7AFF","#AAFF0C", "#e02aa9"]; // to show countries as disabled when already used to attack
 var PlayerNames = ["Rojos", "Azules", "Verdes", "Rosas"];
 var BlockedRegions = []; // Temporal to store which countries this player already used to attack, resseted on every turn beggining
 var NumPlayers = 4; // Number of players (max 4)

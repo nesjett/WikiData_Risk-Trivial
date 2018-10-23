@@ -59,7 +59,7 @@
     <script src="js/game.js"></script> <!-- always load before creating map -->
     <script>
         jQuery(function(){
-            GetVecindades();
+            GetNeighbours();
             CreateScoreBoards();
             $("#turn").css("background", PlayerColors[Turn]); // Init turn color at begin play
 
@@ -177,6 +177,11 @@
                     CreateScoreBoards();
                     BlockedRegions.push(gChallenged); // TODO: do not allow to make new challenges from here (until we activate resources)
                     ShowPlayerFeedback(true);
+
+                    if(Scores[Turn].length <= BlockedRegions.length){
+                        PassTurn();
+                        $("#turn").css("background", PlayerColors[Turn]);
+                    }
                 }else{
                     //console.log("HA FALLADO")
                     PassTurn();
@@ -194,10 +199,6 @@
                 $(".modal").css({"display":"none"});
                 map.clearSelectedRegions();
 
-                if(Scores[Turn].length <= BlockedRegions.length){
-                    PassTurn();
-                    $("#turn").css("background", PlayerColors[Turn]);
-                }
 
                 UnFocus(map);
                 //$("#click_canvas").css("display", "none");
@@ -211,9 +212,9 @@
     </script>
 </head>
 <body>
-    <div id="map" style="width: 100%; height: 400px"></div>
-    <div id="turn" style="">Turno actual (click para pasar)</div>
-    <div id="team-container"></div>
+    <div id="map" class="animated rotateInDownRight" style="width: 100%; height: 400px"></div>
+    <div id="turn" class="animated fadeInDown">Turno actual (click para pasar)</div>
+    <div id="team-container" class="animated fadeInLeft"></div>
     <canvas id="click_canvas"></canvas>
 
     <!-- Modal -->
