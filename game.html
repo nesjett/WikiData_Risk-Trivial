@@ -9,8 +9,10 @@
     <link rel="stylesheet" media="all" href="css/map.css"/>
     <link rel="stylesheet" media="all" href="css/css.css"/>
     <link rel="stylesheet" media="all" href="css/animate.css"/>
+    <link rel="stylesheet" media="all" href="css/button_loader.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="js/anime.min.js"></script>
+    <script src="js/button_loader.js"></script>
 
 
     <script src="jquery-jvectormap.js"></script>
@@ -61,7 +63,7 @@
         jQuery(function(){
             GetNeighbours();
             CreateScoreBoards();
-            $("#turn").css("background", PlayerColors[Turn]); // Init turn color at begin play
+            //$("#turn").css("background", PlayerColors[Turn]); // Init turn color at begin play
 
             /* // Example color set
               var myCustomColors = {
@@ -178,10 +180,15 @@
                     BlockedRegions.push(gChallenged); // TODO: do not allow to make new challenges from here (until we activate resources)
                     ShowPlayerFeedback(true);
 
-                    if(Scores[Turn].length <= BlockedRegions.length){
-                        PassTurn();
-                        $("#turn").css("background", PlayerColors[Turn]);
+                    if(!IsGameFinished()) {
+                        if(MovementsAvailable()){
+                            PassTurn();
+                            $("#turn").css("background", PlayerColors[Turn]);
+                        }
+                    }else{
+                        // TODO: Game finished
                     }
+
                 }else{
                     //console.log("HA FALLADO")
                     PassTurn();
@@ -205,17 +212,43 @@
                 $("#click_canvas").animate({
                     opacity: 'hide'
                 }, 200);
+
+
                 console.log(Scores);
                 console.log(DetermineRegionColors())
+            });
+
+            $(document).on("click", ".restartgame", function(e){
+                InitPlayers();
+                CreateScoreBoards();
+                map.series.regions[0].setValues(DetermineRegionColors());
+                $("#gamefinished_layer").animateCss("fadeOut", function(){
+                    // TODO: Display none to gamefinished_layer
+                });
             });
         })
     </script>
 </head>
 <body>
-    <div id="map" class="animated rotateInDownRight" style="width: 100%; height: 400px"></div>
-    <div id="turn" class="animated fadeInDown">Turno actual (click para pasar)</div>
+    <div id="gamefinished_layer" style="display: none;" class="animated">
+        <div id="winner_name">¡------ GANAN!</div>
+        <button class="restartgame">Jugar de nuevo</button>
+    </div>
+    <div id="gamewellcome_layer"></div>
+
+
+    <div id="map" class="animated rotateInDownRight" style="width: 100%; height: 400px;"></div>
+    <!--<div id="turn" class="animated fadeInDown">Turno actual (click para pasar)</div>-->
+    <div class="animated fadeInDown" style="position:absolute;top:0;left:50px;">
+        <a id="turn" href="#" class="progress-button"><span id="turn-container">¡Pasar turno!</span></a>
+    </div>
     <div id="team-container" class="animated fadeInLeft"></div>
     <canvas id="click_canvas"></canvas>
+
+
+    <div class="loadingbar bar-one bar-con">
+        <div class="bar" data-percent="100">30s</div>
+    </div>
 
     <!-- Modal -->
     <div class="modal" id="question-modal">
@@ -225,7 +258,7 @@
                 <h1 id="modal-head">¡HAS RETADO A UN OPONENTE!</h1>
             </div>
             <div class="modal-body">
-                <p id="modal-text">Cargando...</p>
+                <p id="modal-text">Cargando... <br /><i class="fas fa-ghost fa-spin fa-2x"></i></p>
                 <br />
                 <div id="opt-container">
                 </div>

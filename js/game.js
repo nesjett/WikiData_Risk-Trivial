@@ -1,4 +1,4 @@
-var AvailableRegions = ["BE","FR","BG","DK","HR","DE","BA","HU","JE","BY","GR","NL","PT","LI","LV","LT","LU","PL","XK","CH","EE","AL","IT","GG","CZ","GB","IE","ES","ME","MD","RO","RS","MK","SK","MT","SI","SM","UA","AT"];
+var AvailableRegions = ["BE","FR","BG","DK","HR","DE","BA","HU","JE","BY","GR","NL","PT","LI","LV","LT","LU","PL","XK","CH","EE","AL","IT","GG","CZ","GB","IE","ES","ME","MD","RO","RS","MK","SK","MT","SI","UA","AT"];
 var AvailableRegionsID = ["Q31","Q142","Q219","Q35","Q224","Q183","Q225","Q28","Q785","Q184","Q41","Q55","Q45","Q347","Q211","Q37","Q32","Q4628","Q36","Q1246","Q39","Q191","Q222","Q38","Q25230","Q213","Q27","Q29","Q236","Q217","Q218","Q403","Q221","Q214","Q233","Q215","Q238","Q212","Q40"];
 var AvailableRegionsLocation = [["50.75","4.5"],["46","2"],["43","25"],["56","10"],["45.16","15.5"],["51","9"],["43.91","17.67"],["47","20"],["49.21","-2.13"],["53","28"],["39","22"],["52.5","5.75"],["39.5","-8"],["47.16","9.53"],["57","25"],["56","24"],["49.75","6.16"],["62","-7"],["52","20"],["42.60","20.90"],["46.81","8.22"],["58.59","25.0"],["41.15","20.16"],["41.87","12.56"],["49.46","-2.58"],["49.81","15.47"],["55.37","-3.43"],["53.41","-8.24"],["42.7","19.37"],["47.41","28.36"],["45.94","24.99"],["44.01","21.00"],["41.60","21.74"],["48.66","19.69"],["35.93","14.37"],["46.15","14.99"],["43.94","12.45"],["48.37","31.16"],["47.51","14.55"]];
 
@@ -59,9 +59,10 @@ function InitPlayers(){
 }
 
 function CreateScoreBoards(){
-    $("#team-container").empty();
+    let TContainer = $("#team-container");
+    TContainer.empty();
     for(i = 0; i < Scores.length; i++){
-        $("#team-container").append("<div class='team-score' style='background:"+PlayerColors[i]+"'>"+Scores[i].length+"</div>");
+        TContainer.append("<div class='team-score' style='background:"+PlayerColors[i]+"'>"+Scores[i].length+"</div>");
     }
 }
 
@@ -144,18 +145,74 @@ function UnFocus(map){
     map.setFocus({regions: ["PT","DK","EE","UA"], animate:true})
 }
 
+/**
+ * @return {number}
+ */
 function PassTurn(){
     BlockedRegions = [];
-    Turn++;
-    if(Turn > NumPlayers-1)
-        Turn = 0;
+    let lastTurn = Turn;
+    let nextTurn = Turn+1;
+    console.log(nextTurn);
+
+    if(nextTurn >= Scores.length)
+        nextTurn = 0;
+    while(nextTurn !== lastTurn && Scores[nextTurn].length <= 0){
+        nextTurn++;
+    }
+    Turn = nextTurn;
+
     return Turn;
 }
 
-function CanSelect(code){
-    return Scores[Turn].indexOf(code) != -1
+function GetNextTurn(){
+    let lastTurn = Turn;
+    let nextTurn = Turn+1;
+
+    if(nextTurn >= Scores.length)
+        nextTurn = 0;
+    while(nextTurn !== lastTurn && Scores[nextTurn].length <= 0){
+        nextTurn++;
+    }
+
+    return nextTurn;
 }
 
+/**
+ * @return {boolean}
+ */
+function CanSelect(code){
+    return Scores[Turn].indexOf(code) !== -1
+}
+
+function MovementsAvailable() {
+    return Scores[Turn].length <= BlockedRegions.length;
+}
+
+/**
+ * @return {boolean}
+ */
+function IsGameFinished(){
+    return Scores[Turn].length >= AvailableRegions.length;
+}
+
+function GameWinner(){
+    if(IsGameFinished())
+    for(i = 0; i < Scores.length; i++){
+        if(Scores[i].length > 0)
+            return i;
+    }
+
+    return null;
+}
+
+function GameWinnerName(){
+    let winner = GameWinner();
+    if(winner != null)
+        return PlayerNames[winner];
+
+
+    return null;
+}
 
 /**
  * Map event handlers
