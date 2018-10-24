@@ -9,10 +9,9 @@
     <link rel="stylesheet" media="all" href="css/map.css"/>
     <link rel="stylesheet" media="all" href="css/css.css"/>
     <link rel="stylesheet" media="all" href="css/animate.css"/>
-    <link rel="stylesheet" media="all" href="css/button_loader.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="js/anime.min.js"></script>
-    <script src="js/button_loader.js"></script>
+    <script src="js/circle_progressbar.js"></script>
 
 
     <script src="jquery-jvectormap.js"></script>
@@ -150,11 +149,11 @@
             map.series.regions[0].setValues(DetermineRegionColors());
 
 
-            $(document).on("click", "#turn", function(){
+            /*$(document).on("click", "#turn", function(){
                 //$("#turn").html(PassTurn());
-                PassTurn()
+                //PassTurn()
                 $("#turn").css("background", PlayerColors[Turn])
-            })
+            })*/
 
 
 
@@ -183,7 +182,6 @@
                     if(!IsGameFinished()) {
                         if(MovementsAvailable()){
                             PassTurn();
-                            $("#turn").css("background", PlayerColors[Turn]);
                         }
                     }else{
                         // TODO: Game finished
@@ -192,14 +190,7 @@
                 }else{
                     //console.log("HA FALLADO")
                     PassTurn();
-                    $("#turn").css("background", PlayerColors[Turn]);
-                    //---- ces+ama
-                    /*$("#fail-modal").css({"display":"block"});
-
-                    $("html").click(function(){
-                     $("#fail-modal").css({"display":"none"});
-                    });*/
-                    //----
+                    //$("#turn").css("background", PlayerColors[Turn]);
                     ShowPlayerFeedback(false);
                 }
                 //UnFocus();
@@ -208,10 +199,9 @@
 
 
                 UnFocus(map);
-                //$("#click_canvas").css("display", "none");
                 $("#click_canvas").animate({
                     opacity: 'hide'
-                }, 200);
+                }, 300);
 
 
                 console.log(Scores);
@@ -226,6 +216,21 @@
                     // TODO: Display none to gamefinished_layer
                 });
             });
+
+
+            $(document).on("circle-animation-end", function(e){
+                let team = $(e.target).parent().attr("id").split("_")[1];
+                if(team === Turn.toString()){
+                    console.log(team + " | "+Turn)
+                    console.log("ENTRO")
+                    //PassTurn();
+                    //map.clearSelectedRegions();
+                }
+            });
+
+            $(document).on("click", ".team-score", function(){
+                $('.teamtimer').circleProgress({ value: 0, fill: PlayerColors[Turn] });
+            })
         })
     </script>
 </head>
@@ -239,9 +244,7 @@
 
     <div id="map" class="animated rotateInDownRight" style="width: 100%; height: 400px;"></div>
     <!--<div id="turn" class="animated fadeInDown">Turno actual (click para pasar)</div>-->
-    <div class="animated fadeInDown" style="position:absolute;top:0;left:50px;">
-        <a id="turn" href="#" class="progress-button"><span id="turn-container">¡Pasar turno!</span></a>
-    </div>
+
     <div id="team-container" class="animated fadeInLeft"></div>
     <canvas id="click_canvas"></canvas>
 

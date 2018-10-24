@@ -62,8 +62,23 @@ function CreateScoreBoards(){
     let TContainer = $("#team-container");
     TContainer.empty();
     for(i = 0; i < Scores.length; i++){
-        TContainer.append("<div class='team-score' style='background:"+PlayerColors[i]+"'>"+Scores[i].length+"</div>");
+        TContainer.append("<div class='team-score-container' id='team_"+i+"'><div class='team-score' style='background:"+PlayerColors[i]+"'><div class='score'>"+Scores[i].length+"</div></div> <div data-color='"+PlayerColors[i]+"' class='teamtimer'></div> </div>");
     }
+    InitScoreBoardsTimer();
+}
+
+function InitScoreBoardsTimer(){
+    $('#team_'+Turn+' .teamtimer').circleProgress({
+        value: 0,
+        size: 114,
+        thickness: 26,
+        fill: PlayerColors[Turn],
+        emptyFill: 'rgba(0,0,0,0.3)',
+        reverse: true,
+        animationStartValue: 1.0,
+        animation:  { duration: 30000, easing: "linear" }
+    });
+    $("#team_"+ Turn +".team-score-container").addClass("big")
 }
 
 function DetermineRegionColors(){
@@ -152,7 +167,6 @@ function PassTurn(){
     BlockedRegions = [];
     let lastTurn = Turn;
     let nextTurn = Turn+1;
-    console.log(nextTurn);
 
     if(nextTurn >= Scores.length)
         nextTurn = 0;
@@ -160,8 +174,28 @@ function PassTurn(){
         nextTurn++;
     }
     Turn = nextTurn;
+    console.log(Turn)
+    PassTurnVisuals();
 
     return Turn;
+}
+
+function PassTurnVisuals(){
+    let circles = $('.teamtimer');
+    circles.circleProgress({ value:1, emptyFill: 'rgba(0,0,0,0)' });
+
+    $(circles.circleProgress('widget')).stop();
+    $('#team_'+Turn+' .teamtimer').circleProgress({
+        value: 0,
+        size: 114,
+        thickness: 26,
+        fill: PlayerColors[Turn],
+        emptyFill: 'rgba(0,0,0,0.3)',
+        reverse: true,
+        animationStartValue: 1.0,
+        animation:  { duration: 30000, easing: "linear" } });
+    $(".team-score-container").removeClass("big")
+    $("#team_"+ Turn +".team-score-container").addClass("big")
 }
 
 function GetNextTurn(){
