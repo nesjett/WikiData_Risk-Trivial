@@ -218,13 +218,12 @@
             });
 
 
-            $(document).on("circle-animation-end", function(e){
+            $(document).on("circle-animation-progress", function(e, progress, step){
                 let team = $(e.target).parent().attr("id").split("_")[1];
-                if(team === Turn.toString()){
-                    console.log(team + " | "+Turn)
-                    console.log("ENTRO")
-                    //PassTurn();
-                    //map.clearSelectedRegions();
+                if(team === Turn.toString() && progress >= 1){ // turn lost
+                    map.clearSelectedRegions();
+                    SelectedRegion = null; // clear selection
+                    PassTurn();
                 }
             });
 
@@ -247,11 +246,6 @@
 
     <div id="team-container" class="animated fadeInLeft"></div>
     <canvas id="click_canvas"></canvas>
-
-
-    <div class="loadingbar bar-one bar-con">
-        <div class="bar" data-percent="100">30s</div>
-    </div>
 
     <!-- Modal -->
     <div class="modal" id="question-modal">

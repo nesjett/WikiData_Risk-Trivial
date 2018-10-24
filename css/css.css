@@ -264,35 +264,3 @@ gamefinished_layer
     border: 2px solid #fff;
     color: #ffffff;
 }
-
-
-/*
-Loading bars
- */
-.loadingbar{
-    position:absolute;
-    bottom:0;
-    left:0;
-    width:100%;
-    z-index:10;
-    padding:5px;
-}
-/*
-.transition (@animation: ease-in, @time: 1s) {
-    transition: width @animation @time;
-    -webkit-transition: width @animation @time;
-    -moz-transition: width @animation @time;
-    -o-transition: width @animation @time;
-}*/
-.bar-con{
-    background-color:#666;
-}
-.bar{
-    float:left;
-    height:100%;
-    width:0%;
-}
-.bar-one .bar{
-    background-color:#03AB70;
-.transition;
-}
